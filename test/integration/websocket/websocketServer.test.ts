@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import { WebsocketServer } from "../../../src/websocket/websocketServer";
+import type { Event } from "../../../src/domain/event";
 
 function waitForOpen(ws: WebSocket) {
   return new Promise<void>((resolve) => {
@@ -37,5 +38,38 @@ describe("WebsocketServer integration", () => {
     try {
       (server as any).wss.close();
     } catch (_) {}
+  });
+
+  test("sends only to OPEN clients and skips closed ones", () => {
+    const server = new WebsocketServer();
+
+    const openSend = jest.fn();
+    const closedSend = jest.fn();
+
+    const openClient = {
+      send: openSend,
+      readyState: WebSocket.OPEN,
+    } as unknown as WebSocket;
+    const closedClient = {
+      send: closedSend,
+      readyState: WebSocket.CLOSED,
+    } as unknown as WebSocket;
+
+    // inject a fake wss with a clients Set
+    (server as any).wss = {
+      clients: new Set([openClient, closedClient]),
+    } as any;
+
+    const event: Event = {
+      id: "e1",
+      name: "evt",
+      time: Date.now(),
+      isTriggered: false,
+    };
+
+    server.notifyAllClients({ type: "EVENTS_TRIGGERED", payload: event });
+
+    expect(openSend).toHaveBeenCalledTimes(1);
+    expect(closedSend).not.toHaveBeenCalled();
   });
 });
