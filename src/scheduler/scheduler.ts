@@ -19,12 +19,4 @@ export class Scheduler {
 
     this.timers.set(event.id, timer);
   }
-
-  cancel(eventId: string): void {
-    const timer = this.timers.get(eventId);
-    if (timer) {
-      clearTimeout(timer);
-      this.timers.delete(eventId);
-    }
-  }
 }
