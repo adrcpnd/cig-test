@@ -82,3 +82,7 @@ Run integration tests alone
 ```bash
 npm run test-integration
 ```
+
+## Test coverage
+<img width="582" height="369" alt="Capture d’écran 2026-01-30 à 15 07 22" src="https://github.com/user-attachments/assets/fe8513cf-0d7d-42fa-9ed4-4fdf7db22f39" />
+
