@@ -9,6 +9,19 @@ Small Node + TypeScript service that accepts WebSocket commands to create event 
 - In-memory scheduler re-schedules pending events on startup.
 - Broadcast `EVENTS_TRIGGERED` messages to all connected clients when an event triggers.
 
+## Demo
+
+- Runs the server
+- Connect client #1 that creates an event scheduled 5 secondes in the future
+- Server receives event from client #1 and save it in db
+- Events triggers after 5 secondes, dispached to connected clients (client #1)
+- Connect client #2 that creates an event scheduled 5 secondes in the future
+- Server receives event from client #2 and perist it in db
+- Events triggers after 5 secondes, dispached to connected clients (client #1 and client #2)
+
+https://github.com/user-attachments/assets/51d31197-fb40-4273-9b53-9a02acb20733
+
+
 ## Architecture Overview
 
 - `src/db/database.ts` — opens SQLite DB and ensures the `events` table exists.
